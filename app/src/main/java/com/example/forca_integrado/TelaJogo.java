@@ -51,9 +51,6 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         ListaImagens.add(R.drawable.forca_10_9);
         ListaImagens.add(R.drawable.forca_11_9);
 
-        b1 = findViewById(R.id.id1);
-        b1.setOnClickListener(this);
-
         ListaPalavras = new ArrayList<String>();
         ListaPalavras.add("CAIXA");
         ListaPalavras.add("SUPERMERCADO");
@@ -65,6 +62,8 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         ListaPalavras.add("SHAKIRA");
         ListaPalavras.add("COMPUTAÇÃO");
         ListaPalavras.add("CORINTHIANS");
+        ListaPalavras.add("PENTEADEIRA");
+        ListaPalavras.add("ESCRIVANINHA");
 
         texto = findViewById(R.id.textView3);
 
@@ -100,10 +99,12 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
             Button b = findViewById(ListaIdsButtons.get(j));
             b.setOnClickListener(this);
         }
+        inicializaJogo();
     }
 
     public void inicializaJogo(){
         imagem.setImageResource(R.drawable.forca_0_9);
+        indiceListaImagens = 0;
         palavra = sorteiaPalavra();
         estado = new char[palavra.length()];
         for(int i = 0; i<estado.length; i++) {
@@ -111,6 +112,23 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         }
         atualizaTexto();
     }
+
+    public void verificarLetra(char c){
+        boolean status = false;
+        for(int i=0; i<palavra.length(); i++){
+            if( palavra.charAt(i)==c ){
+                status = true;
+                estado[i] = c;
+            }
+        }
+        if(!status){
+            atualizaForca();
+        }
+        else{
+            atualizaTexto();
+        }
+    }
+
     public void atualizaTexto(){
         String temporaria = new String();
         temporaria = "";
@@ -132,6 +150,8 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        texto.setText(sorteiaPalavra());
+        Button b = (Button) view;
+        verificarLetra(b.getText().toString().charAt(0));
+        b.setEnabled(false);
     }
 }
