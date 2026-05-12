@@ -8,4 +8,7 @@ public class Arraylist<T> {
     public T get(T indiceListaImagens) {
         return null;
     }
+
+    public T size() {
+    }
 }

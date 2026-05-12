@@ -1,5 +1,6 @@
 package com.example.forca_integrado;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,11 +20,11 @@ import java.util.Collections;
 public class TelaJogo extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView imagem;
-    private int indiceListaImagens;
+    private int indiceListaImagens, contaAcerto, contaErro;
+    private TextView texto, txtAcerto, txtErro;
     private Arraylist<Integer> ListaImagens, ListaIdsButtons;
     private ArrayList<String> ListaPalavras;
-    private Button b1;
-    private TextView texto;
+    private Button b;
     private String palavra;
     private char[] estado;
 
@@ -38,7 +40,11 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         });
 
         imagem = findViewById(R.id.imageView2);
-        indiceListaImagens = -1;
+        txtAcerto = findViewById(R.id.txtAcerto);
+        txtErro = findViewById(R.id.txtErro);
+        contaAcerto = 0;
+        contaErro = 0;
+        indiceListaImagens = 0;
         ListaImagens = new Arraylist<Integer>();
         ListaImagens.add(R.drawable.forca_1_9);
         ListaImagens.add(R.drawable.forca_2_9);
@@ -110,7 +116,49 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         for(int i = 0; i<estado.length; i++) {
             estado[i] = '_';
         }
+
+        contaErro = 0;
+        contaAcerto = 0;
+        txtAcerto.setText(Integer.toString(contaAcerto));
+        txtErro.setText(Integer.toString(contaErro) + "/" + Integer.toString(ListaImagens.size()));
         atualizaTexto();
+
+        for (int j = 0; j<ListaIdsButtons.size(); j++){
+            Button b = findViewById(ListaIdsButtons.get(j));
+            b.setEnabled(true);
+        }
+    }
+
+    public void checaSeTerminou(){
+        boolean verifica = false;
+        for(int i=0; i<estado.length; i++){
+            if(estado[i] == '_'){
+                verifica = true;
+            }
+        }
+        if(!verifica){
+            AlertDialog.Builder caixa = new AlertDialog.Builder(this);
+            caixa.setTitle("Você venceu!!! :)");
+            caixa.setMessage("Deseja jogar novamente?");
+            caixa.setPositiveButton("Jogar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    inicializaJogo();
+                }
+            });
+            caixa.show();
+        }
+        if(contaErro >= ListaImagens.size()){
+            AlertDialog.Builder caixa = new AlertDialog.Builder(this);
+            caixa.setTitle("Você perdeu :(");
+            caixa.setMessage("Deseja jogar novamente?");
+            caixa.setPositiveButton("Jogar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    inicializaJogo();
+                }
+            });
+        }
     }
 
     public void verificarLetra(char c){
@@ -123,10 +171,15 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         }
         if(!status){
             atualizaForca();
+            contaErro++;
+            txtErro.setText(Integer.toString(contaErro) + "/" + Integer.toString(ListaImagens.size()));
         }
-        else{
+        else {
             atualizaTexto();
+            contaAcerto++;
+            txtAcerto.setText(Integer.toString(contaAcerto));
         }
+        checaSeTerminou();
     }
 
     public void atualizaTexto(){
