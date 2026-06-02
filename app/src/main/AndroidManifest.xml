@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Forca_integrado">
         <activity
-            android:name=".TelaRecicle"
+            android:name=".TelaRecycler"
             android:exported="false" />
         <activity
             android:name=".TelaCadastro"

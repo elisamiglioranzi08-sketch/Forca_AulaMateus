@@ -1,6 +1,7 @@
 package com.example.forca_integrado;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -83,7 +84,7 @@ public class TelaCadastro extends AppCompatActivity implements View.OnClickListe
         }
 
         if(view == btnListar){
-
+            startActivity(new Intent(this, TelaRecycler.class));
         }
 
     }
@@ -93,8 +94,7 @@ public class TelaCadastro extends AppCompatActivity implements View.OnClickListe
 
         if(radioGroup == grupo){
             RadioButton temporario = findViewById(i);
-            Toast.makeText(TelaCadastro.this,temporario.getText().toString(),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(TelaCadastro.this,temporario.getText().toString(), Toast.LENGTH_SHORT).show();
         }
 
     }
